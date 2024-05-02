@@ -13,9 +13,12 @@ const ticketRoutes = require("./routes/competition/ticket");
 const winnerRoutes = require("./routes/competition/winner");
 const paymentProcessRoutes = require("./routes/payment/process");
 
+// Database
+const sequelize = require("./config/database");
+
 // Initialie express
 const app = express();
-
+    
 // Load environment variables from .env file
 dotenv.config();
 
@@ -51,6 +54,17 @@ app.get("/*", function (req, res) {
     res.sendFile(path.join(__dirname, "build", "index.html"));
     }
 );
+
+// Connect to Db
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log("Connection to database has been established successfully.");
+    })
+    .catch((err) => {
+        console.error("Unable to connect to the database:", err);
+    });
+    
 // Handles any requests that don't match the ones above
 const port = process.env.PORT || 3000;
 

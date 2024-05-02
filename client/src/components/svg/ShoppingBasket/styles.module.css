@@ -1,0 +1,7 @@
+.icon {
+  fill: #EDF67D;
+}
+
+[data-mui-color-scheme="light"] .icon {
+  fill: #1F1D22;
+}
