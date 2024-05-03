@@ -1,0 +1,699 @@
+{
+	"info": {
+		"_postman_id": "abe27bb0-6c8c-4010-ae2f-4a70439c1da8",
+		"name": "CompWeb",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19173141",
+		"_collection_link": "https://gold-shuttle-668598.postman.co/workspace/Marketplace~d89e5994-c27c-4eb7-b3c1-a0c9dec50be3/collection/19173141-abe27bb0-6c8c-4010-ae2f-4a70439c1da8?action=share&source=collection_link&creator=19173141"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"tudor3\",\n    \"email\": \"gontatudor3@gmail.com\",\n    \"password\": \"Qewrt123/\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/auth/register",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"gontatudor3@gmail.com\",\n    \"password\": \"Qewrt123/\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/auth/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0Njc2MzM5LCJleHAiOjE3MTQ2NzcyMzl9.ApkcBA0Ps5OHzROpM6X5u1MSwEVCJKjsR78qoR5D9eE",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/auth/logout",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Verify Token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzA1NzQwLCJleHAiOjE3MTQ3MDU4NjB9.5xafJJD3QrL1hZWCNVgI2MEUlpwirPwEnD75L34ykEk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/auth/verifyToken",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"auth",
+										"verifyToken"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Password reset user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0Njc2MzM5LCJleHAiOjE3MTQ2NzcyMzl9.ApkcBA0Ps5OHzROpM6X5u1MSwEVCJKjsR78qoR5D9eE",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"gontatudor3@gmail.com\",\n    \"password\": \"Qewrt123/\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/auth/password-reset",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"auth",
+										"password-reset"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Profile",
+					"item": [
+						{
+							"name": "Get profile by id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEyNTk3LCJleHAiOjE3MTQ3MTM0OTd9.zp_C8XFw06ok74wkvzP88StXsdvcosHJSF0mlK5HkPk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/profile/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"profile",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update profile by id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEyNTk3LCJleHAiOjE3MTQ3MTM0OTd9.zp_C8XFw06ok74wkvzP88StXsdvcosHJSF0mlK5HkPk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"firstName\": \"Tudor\", \n    \"lastName\": \"Gonta\", \n    \"email\": \"gontatudor2@gmail.com\", \n    \"phone\": \"+373512311\", \n    \"address\": \"heroes roed\", \n    \"city\": \"olimp\", \n    \"state\": \"olimp\", \n    \"country\": \"greece\", \n    \"postCode\": \"BR5 1BW\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/profile/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"profile",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete user by id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEyNTk3LCJleHAiOjE3MTQ3MTM0OTd9.zp_C8XFw06ok74wkvzP88StXsdvcosHJSF0mlK5HkPk",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/profile/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"profile",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Competitions",
+			"item": [
+				{
+					"name": "Comps",
+					"item": [
+						{
+							"name": "Get all competitions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/competitions?limit=10",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"competitions"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get competition by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/competitions/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"competitions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete competition",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEzNjY1LCJleHAiOjE3MTQ3MTQ1NjV9.aLSyJMuycr0VQCRyHEGA6l4U2UCMH5x4I98y3lYKd_g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/competitions/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"competitions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create competition",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEzNjY1LCJleHAiOjE3MTQ3MTQ1NjV9.aLSyJMuycr0VQCRyHEGA6l4U2UCMH5x4I98y3lYKd_g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Competition 1\", \n    \"description\": \"First competition\", \n    \"start_date\": \"1714701825\", \n    \"end_date\": \"1714701825\", \n    \"ticket_price\": 100, \n    \"total_tickets\": 2000, \n    \"image_url\": \"link_to_image\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/competitions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"competitions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update competition",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzEzNjY1LCJleHAiOjE3MTQ3MTQ1NjV9.aLSyJMuycr0VQCRyHEGA6l4U2UCMH5x4I98y3lYKd_g",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"Competition 3\", \n    \"description\": \"First competition\", \n    \"start_date\": \"1714701825\", \n    \"end_date\": \"1714701825\", \n    \"ticket_price\": 100, \n    \"total_tickets\": 2000, \n    \"image_url\": \"link_to_image\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/competitions/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"competitions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tickets",
+					"item": [
+						{
+							"name": "Get tickets of a user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/tickets/4?limit=2&page=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"tickets",
+										"4"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create ticket",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userId\": 4,\n    \"competitionId\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/tickets",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"tickets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete ticket",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/tickets/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"tickets",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Winners",
+					"item": [
+						{
+							"name": "Get all winners",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/winners?limit=2&page=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"winners"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all winners of a competition",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:3030/api/winners/2?limit=2&page=1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"winners",
+										"2"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create winner",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzE0NzE0NzA2LCJleHAiOjE3MTQ3MTU2MDZ9.kWYjsvXbbxAfEr5XCEvH2svW_KHjtQRprEIMS773Obs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"competitionId\": 2,\n    \"winners\": [\n        {\n            \"userId\": 4,\n            \"prizeDescription\": \"Passed\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3030/api/winners/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3030",
+									"path": [
+										"api",
+										"winners",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
