@@ -14,8 +14,9 @@ const getAllWinners = async (req, res) => {
             limit: parseInt(limit),
             offset: (parseInt(page) - 1) * parseInt(limit)
         });
-        res.status(200).json(winners);
+        res.status(200).json({ winners });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: 'Server Error' });
     }
 }

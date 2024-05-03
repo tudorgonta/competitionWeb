@@ -12,7 +12,8 @@ const {
 
 // Middleware
 const { 
-    verifyTokenAdmin
+    verifyTokenAdmin,
+    verifyTokenUser
 } = require('../../../middlewares/verifyToken');
 
 // Get all competitions

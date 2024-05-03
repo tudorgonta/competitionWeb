@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../config/database');
 const User = require('./User');
 
 const AuditLog = sequelize.define('AuditLog', {
@@ -19,6 +19,6 @@ const AuditLog = sequelize.define('AuditLog', {
   action: DataTypes.TEXT,
   timestamp: DataTypes.DATE,
   ip_address: DataTypes.STRING
-});
+}, { timestamps: true });
 
 module.exports = AuditLog;

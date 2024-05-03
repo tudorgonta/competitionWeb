@@ -12,34 +12,41 @@ const {
     UserRoles
 } = require('../../models'); // Assuming index.js exports User and Profile models
 
-// Write a fucntion to generate a new access token using the refresh token
-const generateAccessToken = (req, res) => {
-    try {
-        // Extract the refresh token from the request
-        const refreshToken = req.cookies.refreshToken;
+const Joi = require('joi');
 
-        // If no refresh token is provided, return an error
-        if (!refreshToken) {
+const { getTokenFromHeader } = require('../../middlewares/verifyToken');
+
+// Write a fucntion to generate a new access token using the refresh token
+const generateRefreshToken = (req, res) => {
+    try {
+        // Extract the access token from the request
+        const accessToken = getTokenFromHeader(req);
+
+        // If no access token is provided, return an error
+        if (!accessToken) {
             return res.status(401).json({ error: 'Refresh token not provided' });
         }
-
-        // Verify the refresh token
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decodedToken) => {
+        const userId = jwt.decode(accessToken).userId;
+        const role = jwt.decode(accessToken).role;
+        // Verify the access token
+        jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, async (err) => {
             if (err) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
-            }
+                // Find profile by decodedToken.user_id
+                const profile = await Profile.findOne({ where: { user_id: userId} });
+                if(!profile) {
+                    return res.status(404).json({ error: 'Profile not found' });
+                }
 
-            // Check if the refresh token exists in the database
-            const profile = await Profile.findOne({ where: { refresh_token: refreshToken } });
-            if (!profile) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
-            }
+                // Verify that refreshToken is not expired
+                const expTime = jwt.decode(profile.refresh_token).exp;
+                const isExpired = Date.now() >= expTime * 1000;
+                if(isExpired) {
+                    return res.status(403).json({ error: 'Refresh token expired' });
+                }
 
-            // Create a new access token
-            const accessToken = jwt.sign({ userId: decodedToken.userId, role: decodedToken.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-
-            // Send the access token to the client
-            res.status(200).json({ token: accessToken });
+                const accessToken = jwt.sign({ userId: userId, role: role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+                return res.status(200).json({ token: accessToken });
+            }    
         });
     } catch (error) {
         console.error('Error:', error);
@@ -78,8 +85,8 @@ const userRegister = async (req, res) => {
 
         // Hash the password with bcrypt
         const saltRounds = process.env.SALT_ROUNDS || 10;
-        const salt = bcrypt.genSalt(saltRounds);
-        const hashedPassword = bcrypt.hash(password, salt);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create the user
         const newUser = await User.create({ username, email, password_hash: hashedPassword });
@@ -100,44 +107,41 @@ const userRegister = async (req, res) => {
         const foundRole = await Role.findOne({ where: { role_name: 'user' } });
 
         // Assign the user role to the user
-        await UserRoles.create({ user_id: newUser.user_id, role_id: foundRole.role_id });
+        const createdUserRole = await UserRoles.create({ user_id: newUser.user_id, role_id: foundRole.role_id });
+        if(!createdUserRole) {
+            return res.status(500).json({ error: 'Failed to assign user role to user' });
+        }
 
         // Log to AuditLog
-        await AuditLog.create({ action: `User registration successful: User with email ${email} created`, timestamp: new Date() });
+        await AuditLog.create({ action: `User registration successful: User with email ${email} created`, timestamp: new Date(), user_id: null });
 
         // Send the refresh token as a cookie
         res.cookie('accessToken', accessToken, { httpOnly: true });
 
         // Respond with access token
-        res.status(200).json({ profile: createdProfile, token: accessToken, role: 'user' });
+        res.status(200).json({ profile: createdProfile, accessToken: accessToken, role: 'user' });
     } catch (error) {
         console.error('Error:', error);
         // Log to AuditLog
-        await AuditLog.create({ action: `User registration failed: ${error.message}`, timestamp: new Date() });
+        await AuditLog.create({ action: `User registration failed: ${error.message}`, timestamp: new Date(), user_id: null });
         res.status(500).json({ error: 'Internal server error' });
     }
 }
 
 const userLogout = async (req, res) => {
     try {
-        // Extract the refresh token from the request
-        const refreshToken = req.cookies.refreshToken;
+        // Extract the access token from the request
+        const accessToken = getTokenFromHeader(req);
 
-        // If no refresh token is provided, return an error
-        if (!refreshToken) {
+        // If no access token is provided, return an error
+        if (!accessToken) {
             return res.status(401).json({ error: 'Refresh token not provided' });
         }
 
         // Verify the refresh token
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decodedToken) => {
+        jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
             if (err) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
-            }
-
-            // Check if the refresh token exists in the database
-            const profile = await Profile.findOne({ where: { refresh_token: refreshToken } });
-            if (!profile) {
-                return res.status(403).json({ error: 'Invalid refresh token' });
+                return res.status(403).json({ error: 'Invalid access token' });
             }
 
             // Remove the refresh token from the profile entity
@@ -190,10 +194,13 @@ const userLogin = async (req, res) => {
         const accessToken = jwt.sign({ userId: user.user_id, role: role.role_name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
 
         // Create a refresh token (stored in cookies)
-        const refreshToken = jwt.sign({ userId: user.user_id, role: role.role_name }, process.env.REFRESH_TOKEN_SECRET);
+        const refreshToken = jwt.sign({ userId: user.user_id, role: role.role_name }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d'});
 
         // Create profile for the user
-        const profile = await Profile.findOne({ where: { user_id: user.user_id } });
+        const profile = await Profile.findOne({
+            where: { user_id: user.user_id },
+            attributes: { exclude: ['refresh_token'] } // Exclude the refresh token from the response for security reasons
+        });
 
         // Save the refresh token to the profile entity
         await Profile.update({ refresh_token: refreshToken }, { where: { user_id: user.user_id } });
@@ -216,6 +223,20 @@ const userLogin = async (req, res) => {
 
 const userPasswordReset = async (req, res) => {
     try {
+        // Get Token and verify that the user is the owner of the token
+        const token = getTokenFromHeader(req);
+
+        // Decode token
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+        // Check if the user exists
+        const foundUser = await User.findOne({ where: { user_id: decoded.userId } });
+        if (!foundUser) {
+            // Log to AuditLog
+            await AuditLog.create({ action: `User password reset failed: User with ID ${decoded.userId} does not exist`, timestamp: new Date() });
+            return res.status(400).json({ error: 'User does not exist' });
+        }
+
         // Validate incoming data
         const { email, password } = req.body;
         if (!email || !password) {
@@ -242,8 +263,8 @@ const userPasswordReset = async (req, res) => {
 
         // Hash the password with bcrypt
         const saltRounds = process.env.SALT_ROUNDS || 10;
-        const salt = bcrypt.genSalt(saltRounds);
-        const hashedPassword = bcrypt.hash(password, salt);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         // Update the user's password
         await User.update({ password_hash: hashedPassword }, { where: { email } });
@@ -263,7 +284,7 @@ const userPasswordReset = async (req, res) => {
 }
 
 module.exports = {
-    generateAccessToken,
+    generateRefreshToken,
     userRegister,
     userLogout,
     userLogin,

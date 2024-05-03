@@ -1,8 +1,8 @@
+const jwt = require('jsonwebtoken');
+const { getTokenFromHeader } = require('../../middlewares/verifyToken');
 const { 
     Profile,
-    AuditLog ,
-    Role,
-    UserRoles
+    AuditLog
 } = require('../../models'); // Assuming index.js exports User and Profile models
 
 // Validation module
@@ -13,8 +13,22 @@ const getProfile = async (req, res) => {
         // Extract the user ID from the request
         const userId = req.params.userId;
 
+        const token = getTokenFromHeader(req);
+
+        // Check if the user is authorized to view the profile
+        const decodedUserId = jwt.decode(token).userId;
+
+        console.log()
+
+        if (parseInt(decodedUserId) !== parseInt(userId)) {
+            return res.status(403).json({ error: 'Unauthorized' });
+        }
+
         // Find the user profile
-        const profile = await Profile.findOne({ where: { userId } });
+        const profile = await Profile.findOne({
+            where: { user_id: userId },
+            attributes: { exclude: ['refresh_token'] } // Exclude the refresh token from the response for security reasons
+        });
         if (!profile) {
             return res.status(404).json({ error: 'Profile not found' });
         }
@@ -48,15 +62,15 @@ const updateProfile = async (req, res) => {
 
     try {
         const schema = Joi.object({
-            firstName: Joi.string().trim().required(),
-            lastName: Joi.string().trim().required(),
+            firstName: Joi.string().min(2).max(100).trim().required(),
+            lastName: Joi.string().min(2).max(100).trim().required(),
             email: Joi.string().email().required(),
-            phone: Joi.string().trim().required(),
-            address: Joi.string().trim().required(),
-            city: Joi.string().trim().required(),
-            state: Joi.string().trim().required(),
-            country: Joi.string().trim().required(),
-            postCode: Joi.string().trim().required()
+            phone: Joi.string().min(2).max(50).trim().required(),
+            address: Joi.string().min(2).max(100).trim().required(),
+            city: Joi.string().min(2).max(100).trim().required(),
+            state: Joi.string().min(2).max(100).trim().required(),
+            country: Joi.string().min(2).max(100).trim().required(),
+            postCode: Joi.string().min(2).max(100).trim().required()
         });
 
         const { error } = schema.validate({
@@ -75,18 +89,17 @@ const updateProfile = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const profile = await Profile.findOrCreate({
-            where: { user_id: userId },
-            defaults: { 
-                first_name: firstName,  // Adjusted to match column names in model
-                last_name: lastName,
-                phone_number: phone,
-                address: address,
-                city: city,
-                state: state,
-                country: country,
-                postal_code: postCode  // Ensure the key names match those in the model
-            }
+        const profile = await Profile.update({
+            first_name: firstName,  // Adjusted to match column names in model
+            last_name: lastName,
+            phone_number: phone,
+            address: address,
+            city: city,
+            state: state,
+            country: country,
+            postal_code: postCode  // Ensure the key names match those in the model
+        }, {
+            where: { user_id: userId }
         });
 
         let updatedFields = {};
@@ -100,7 +113,6 @@ const updateProfile = async (req, res) => {
         }
         // Update the profile with only the changed fields
         if (Object.keys(updates).length > 0) {
-            await profile.update(updates);
             updatedFields = updates;
         } else {
             updatedFields = { message: "No fields updated; submitted data matched existing records." };

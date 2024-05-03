@@ -10,15 +10,18 @@ const {
 } = require("../../../controllers/competition/winner");
 
 // Middleware
-const { verifyTokenAdmin } = require("../../../middlewares/verifyToken");
+const { 
+  verifyTokenAdmin, 
+  verifyTokenUser 
+} = require("../../../middlewares/verifyToken");
 
 // Get all winners
-router.get("/winners/", verifyTokenAdmin, getAllWinners)
+router.get("/", verifyTokenUser, getAllWinners)
 
 // Get winners of a competition
-router.get("/:competitionId/winners", verifyTokenAdmin, getWinners);
+router.get("/:competitionId", verifyTokenUser, getWinners);
 
 // Select winners of a competition
-router.post("/:competitionId/winners", verifyTokenAdmin, selectWinners);
+router.post("/:competitionId", verifyTokenUser, selectWinners);
 
 module.exports = router;

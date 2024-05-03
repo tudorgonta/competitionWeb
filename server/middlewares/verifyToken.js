@@ -1,9 +1,21 @@
 const jwt = require('jsonwebtoken');
 
+// Retrieves a JWT token from header
+function getTokenFromHeader(req) {
+  // Get auth header value
+  const authHeader = req.headers.authorization;
+  // Check if auth header is undefined
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    // Get token
+    var token = authHeader.slice(7); // Remove 'Bearer ' prefix
+  }
+  return token;
+}
+
 function verifyToken(role) {
   return (req, res, next) => {
     // Extract the token from the request headers, query parameters, or cookies
-    const token = req.headers.authorization || req.query.token || req.cookies.token;
+    const token = getTokenFromHeader(req);
 
     if (!token) {
       return res.status(401).json({ error: 'Token not provided' });
@@ -29,5 +41,6 @@ function verifyToken(role) {
 
 module.exports = {
   verifyTokenUser: verifyToken('user'),
-  verifyTokenAdmin: verifyToken('admin')
+  verifyTokenAdmin: verifyToken('admin'),
+  getTokenFromHeader
 };

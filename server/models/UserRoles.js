@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../config/database');
 const User = require('./User');
 const Role = require('./Role');
 
@@ -18,6 +18,6 @@ const UserRoles = sequelize.define('UserRoles', {
       key: 'role_id'
     }
   }
-});
+}, { timestamps: true });
 
 module.exports = UserRoles;

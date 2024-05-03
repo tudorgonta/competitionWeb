@@ -1,3 +1,4 @@
+const { getTokenFromHeader } = require('../../../middlewares/verifyToken');
 const {
     Ticket,
     AuditLog
@@ -7,11 +8,11 @@ const jwt = require('jsonwebtoken');
 
 const getTickets = async (req, res) => {
     const { userId } = req.params;
-    const token = req.headers['authorization'];
+    const token = getTokenFromHeader(req);
     // decode token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userIdToken = jwt.decode(token).userId;
 
-    if (decoded.user_id !== parseInt(userId)) {
+    if (parseInt(userIdToken) !== parseInt(userId)) {
         return res.status(403).json({ message: 'Unauthorized' });
     }
 
@@ -88,7 +89,7 @@ const cancelTicket = async (req, res) => {
             user_id: ticket.user_id,
         });
 
-        res.status(204).json();
+        res.status(200).json({ message: 'Ticket successfully deleted.' });
     } catch (error) {
         res.status(500).json({ message: 'Server Error' });
     }

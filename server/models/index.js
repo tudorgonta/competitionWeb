@@ -1,15 +1,15 @@
-const sequelize = require('./database');
+const sequelize = require('../config/database');
 
 // Models
-const User = require('./models/User');
-const Profile = require('./models/Profile');
-const Role = require('./models/Role');
-const UserRoles = require('./models/UserRoles');
-const Competition = require('./models/Competition');
-const Ticket = require('./models/Ticket');
-const Winner = require('./models/Winner');
-const Payment = require('./models/Payment');
-const AuditLog = require('./models/AuditLog');
+const User = require('./User');
+const Profile = require('./Profile');
+const Role = require('./Role');
+const UserRoles = require('./UserRoles');
+const Competition = require('./Competition');
+const Ticket = require('./Ticket');
+const Winner = require('./Winner');
+const Payment = require('./Payment');
+const AuditLog = require('./AuditLog');
 
 // Define Relationships
 User.hasOne(Profile, { foreignKey: 'user_id' });

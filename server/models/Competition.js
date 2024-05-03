@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../config/database');
 
 const Competition = sequelize.define('Competition', {
   competition_id: {
@@ -15,6 +15,6 @@ const Competition = sequelize.define('Competition', {
   total_tickets: DataTypes.INTEGER,
   tickets_sold: DataTypes.INTEGER,
   image_url: DataTypes.STRING
-});
+}, { timestamps: false });
 
 module.exports = Competition;

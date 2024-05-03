@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../config/database');
 const Competition = require('./Competition');
 const User = require('./User');
 
@@ -24,6 +24,6 @@ const Ticket = sequelize.define('Ticket', {
     }
   },
   purchase_date: DataTypes.DATE
-});
+}, { timestamps: false });
 
 module.exports = Ticket;

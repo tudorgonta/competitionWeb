@@ -7,7 +7,7 @@ const {
     userRegister, 
     userLogout,
     userPasswordReset,
-    generateAccessToken
+    generateRefreshToken
 } = require('../../../controllers/user/authentication');
 
 // Middleware
@@ -28,6 +28,6 @@ router.post('/logout', verifyTokenUser, userLogout);
 router.patch('/password-reset', verifyTokenUser, userPasswordReset);
 
 // Get new access token
-router.post('/verifyToken', generateAccessToken);
+router.post('/verifyToken', generateRefreshToken);
 
 module.exports = router;
