@@ -28,6 +28,6 @@ router.post('/logout', verifyTokenUser, userLogout);
 router.patch('/password-reset', verifyTokenUser, userPasswordReset);
 
 // Get new access token
-router.post('/verifyToken', generateRefreshToken);
+router.get('/verifyToken', generateRefreshToken);
 
 module.exports = router;

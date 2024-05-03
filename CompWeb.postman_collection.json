@@ -652,7 +652,7 @@
 							"response": []
 						},
 						{
-							"name": "Create winner",
+							"name": "Select winner",
 							"request": {
 								"auth": {
 									"type": "bearer",

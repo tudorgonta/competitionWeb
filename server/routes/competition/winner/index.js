@@ -16,12 +16,12 @@ const {
 } = require("../../../middlewares/verifyToken");
 
 // Get all winners
-router.get("/", verifyTokenUser, getAllWinners)
+router.get("/", verifyTokenAdmin, getAllWinners)
 
 // Get winners of a competition
-router.get("/:competitionId", verifyTokenUser, getWinners);
+router.get("/:competitionId", verifyTokenAdmin, getWinners);
 
 // Select winners of a competition
-router.post("/:competitionId", verifyTokenUser, selectWinners);
+router.post("/", verifyTokenUser, selectWinners);
 
 module.exports = router;

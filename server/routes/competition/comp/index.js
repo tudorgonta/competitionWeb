@@ -23,7 +23,7 @@ router.get('/', getCompetitions);
 router.get('/:competitionId', getCompetition);
 
 // Create a new competition
-router.post('/', verifyTokenAdmin, createCompetition);
+router.post('/', verifyTokenUser, createCompetition);
 
 // Update competition details
 router.put('/:competitionId', verifyTokenAdmin, updateCompetition);

@@ -1,0 +1,32 @@
+.swiper {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.swiperSlide {
+    min-height: 400px;
+    color: black;
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    /* Center slide text vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiperSlide img {
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+.swiperButtonPrev {
+    top: 35% !important;
+}
+
+.swiperButtonNext {
+    top: 35% !important;
+}

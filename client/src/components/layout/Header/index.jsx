@@ -54,12 +54,12 @@ const Header = () => {
   // TODO: take from user redux after persist was added
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  const isAuth = !!currentUser?._id;
+  const isAuth = !!currentUser?.user_id;
 
   const menuOptions = useMemo(
     () => [
       {
-        label: "userDashboard",
+        label: "User Dashboard",
         path: `/profile/${currentUser?.user_id || ""}`,
         icon: <User />,
       },
@@ -72,7 +72,7 @@ const Header = () => {
   const drawerMenuOptions = useMemo(
     () => [
       {
-        label: "header.userDashboard",
+        label: "User Dashboard",
         path: `/profile/${currentUser?.user_id || ""}`,
         icon: <AccountCircleOutlinedIcon />,
       },
